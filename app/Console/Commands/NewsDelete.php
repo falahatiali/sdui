@@ -30,7 +30,7 @@ class NewsDelete extends Command
      */
     public function handle()
     {
-        Log::info('start command ');
+        Log::info('start command');
         News::query()
             ->where('created_at', '<', Carbon::now()->subDays(14))
             ->each(function ($news) {

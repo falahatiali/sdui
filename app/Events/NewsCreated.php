@@ -26,14 +26,4 @@ class NewsCreated
     {
         $this->news = $news;
     }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return Channel
-     */
-    public function broadcastOn()
-    {
-        return new PrivateChannel('channel-name');
-    }
 }

@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Events\NewsCreated;
 use App\Models\News;
 use App\Models\User;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class NewsTest extends TestCase
@@ -153,6 +155,10 @@ class NewsTest extends TestCase
     /** @test */
     public function test_create_news()
     {
+        Event::fake([
+            NewsCreated::class
+        ]);
+
         $params = [
             'title' => fake()->sentence(15),
             'content' => fake()->sentence(32)
@@ -162,9 +168,47 @@ class NewsTest extends TestCase
         $this->postJson('/api/news', $params, $this->commonHeaders)
             ->assertStatus(201);
 
+        Event::assertDispatched(NewsCreated::class);
         self::assertDatabaseHas('news', $params);
         self::assertDatabaseCount('news', 1);
     }
 
+    public function test_update_news()
+    {
+        $this->actingAs($this->user);
 
+        $news = News::factory()->create();
+
+        $params = [
+            'title' => fake()->sentence(15),
+            'content' => fake()->sentence(32)
+        ];
+
+        $this->putJson("/api/news/{$news->id}", $params, $this->commonHeaders)
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => self::JSON_STRUCTURE
+            ]);
+
+        self::assertDatabaseHas('news', $params);
+    }
+
+    /** @test */
+    public function test_delete_news_failed_if_there_is_not_exists_that_news()
+    {
+        $this->actingAs($this->user);
+        $this->deleteJson("/api/news/10", $this->commonHeaders)
+            ->assertStatus(404);
+    }
+
+    /** @test */
+    public function test_delete_news_successfully()
+    {
+        $this->actingAs($this->user);
+        $news = News::factory()->create();
+        $this->deleteJson("/api/news/{$news->id}", $this->commonHeaders)
+            ->assertNoContent();
+
+        self::assertDatabaseCount('news', 0);
+    }
 }

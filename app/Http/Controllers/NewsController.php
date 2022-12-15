@@ -50,6 +50,13 @@ class NewsController extends Controller
                 'content'
             ]));
 
+        return new NewsResource($news);
+    }
+
+    public function destroy(News $news)
+    {
+        $news->delete();
+
         return response()->json([], 204);
     }
 }

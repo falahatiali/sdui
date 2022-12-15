@@ -29,9 +29,13 @@ docker-compose up -d
 docker exec -it sdui composer install
 docker exec -it sdui php artisan key:generate
 docker exec -it sdui php artisan migrate
-docker exec -it sdui composer install
 ```
 
+for running tests run following command:
+
+```angular2html
+docker exec -ti sdui ./vendor/bin/phpunit
+```
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

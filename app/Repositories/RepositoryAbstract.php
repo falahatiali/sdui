@@ -3,11 +3,10 @@
 namespace App\Repositories;
 
 use App\Repositories\Contract\RepositoryInterface;
-use App\Repositories\Exceptions\NoEntityDefinedException;
-use Illuminate\Contracts\Container\BindingResolutionException;
+use Exception;
 use Illuminate\Support\Arr;
 
-abstract class Repository implements RepositoryInterface
+abstract class RepositoryAbstract implements RepositoryInterface
 {
     protected mixed $entity;
 
@@ -82,13 +81,12 @@ abstract class Repository implements RepositoryInterface
     }
 
     /**
-     * @throws BindingResolutionException
-     * @throws NoEntityDefinedException
+     * @throws Exception
      */
     protected function resolveEntity()
     {
         if (!method_exists($this, 'entity')) {
-            throw new NoEntityDefinedException();
+            throw new Exception('Not found the entity');
         }
 
         return app()->make($this->entity());

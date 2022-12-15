@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\News;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -14,20 +15,22 @@ class NewsCreated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public News $news;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(News $news)
     {
-        //
+        $this->news = $news;
     }
 
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel
      */
     public function broadcastOn()
     {

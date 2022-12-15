@@ -13,7 +13,7 @@ class UpdateNewsRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class UpdateNewsRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'max:200',
+            'content' => 'min:5'
         ];
     }
 }

@@ -36,6 +36,25 @@ for running tests run following command:
 ```angular2html
 docker exec -ti sdui ./vendor/bin/phpunit
 ```
+
+if you want to see that cronjob works or not first you should run database seed
+```angular2html
+php artisan db:seed
+```
+
+then you can edit app/Console/Kernel.php file and run schedule commnand every minute
+
+you should edit run function and uncomment line 19 
+```angular2html
+$schedule->command('news:delete_all')->everyMinute();
+```
+and commect line 20:
+```angular2html
+$schedule->command('news:delete_all')->dailyAt('02:00');
+```
+
+then look at laravel.log file. after 1 minute you can see there is a log about removing data.
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
